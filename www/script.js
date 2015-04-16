@@ -1,9 +1,11 @@
 //Page load actions
 var data;
 $(".add").click(function(){sendCommand("/newTimer"); doGenerate(); setTimeout(doGenerate(), 300);});
+$("header").click(function(){doGenerate();});
 
 doGenerate()
 setInterval(updateTimers, 1000);
+setInterval(doGenerate, 3000000);
 
 //Generate the page
 function doGenerate(){
@@ -30,7 +32,7 @@ function generateTimers() {
 		if (section.average > 0) {htmlString += "		<span class='average tag'>" + timeSince(Date.now() - section.average) + " average (" + section.history.length + ")</span><br />";}
 		htmlString += "	</div>"
 		htmlString += "	<div class='progressbar'><span class='meter' id='progress-" + section.id + "'></span></div>"
-		htmlString += "	<div class='buttons'><div class='button done' data-id='" + section.id + "'>Done!</div><div class='button remove' data-id='" + section.id + "'>Remove</div></div>"
+		htmlString += "	<div class='buttons'><div class='button done' data-id='" + section.id + "'>&#10003; Done!</div><div class='button remove' data-id='" + section.id + "'> &#10005; Remove</div></div>"
 		htmlString += "</div>"
 	});
 	
@@ -60,8 +62,8 @@ function editTitle(e) {
 		if(e.keyCode == 13) {
 			$(this).hide();
 			$("[data-editId='" + $(this).attr("id") + "']").html($(this).val());
+			sendCommand("/editTitle?id=" + $(this).attr("data-id") + "&newTitle=" + $(this).val());
 		}
-		sendCommand("/editTitle?id=" + $(this).attr("data-id") + "&newTitle=" + $(this).val());
 	});
 }
 
@@ -79,12 +81,17 @@ function updateTimers() {
 		$("#timer-" + section.id).html(timeSince(section.history[section.history.length - 1]) + " ago");
 		
 		progress = (Date.now() - section.history[section.history.length - 1])/section.average;
+		console.log(progress)
 		if (progress < 1) {
-			$("#progress-" + section.id).css("width", (progress * 100) + "%")
+			$("#progress-" + section.id).css("width", (progress * 100) + "%");
+		}
+		else if (progress > 10 && progress != Infinity) {
+			$("#progress-" + section.id).css("width", "100%");
+			$("#progress-" + section.id).css("background", "#b80d0d");
 		}
 		else {
-			$("#progress-" + section.id).css("width", "100%")
-			$("#progress-" + section.id).css("background", "#b8500d")
+			$("#progress-" + section.id).css("width", "100%");
+			$("#progress-" + section.id).css("background", "#b8500d");
 		}
 		
 	});

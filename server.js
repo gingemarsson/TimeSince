@@ -1,15 +1,20 @@
 var http = require('http');
+var fs = require('fs');
 var express = require('express');
 var app = express();
-var fs = require('fs');
 
 
 var PORT = 8085;
+var UPDATEINTERVAL = 60000;
+
+
 var timers = [];
 var defaultName = "Untitled";
 var filename = "timers.json"
+var writeToFile = false;
 
 loadFile()
+setInterval( function(){if(writeToFile) {updateFile(); writeToFile = false;}}, UPDATEINTERVAL);
 
 //------------------------
 // WEBSITE
@@ -23,7 +28,7 @@ console.log("[INFO]: Application listening at port " + PORT);
 app.use(express.static(__dirname + '/www'));
 
 //The timers as json
-app.use("/timers", function(req, res, next) {res.sendfile(__dirname + "/timers.json");});
+app.use("/timers", function(req, res, next) {res.setHeader('Content-Type', 'application/json'); res.send(JSON.stringify(timers));});
 
 //Edit title
 app.use("/editTitle" ,function(req, res, next){
@@ -66,24 +71,26 @@ function addNewTimer() {
 		if (timer.id >= nextId) {nextId = timer.id + 1}
 	});
 	
-	timers.push({id: nextId, title: defaultName, average: null, history: [Date.now()]});
-	updateFile()
+	//Add to array
+	timers.push({id: nextId, title: defaultName, average: 0, history: [Date.now()]});
+	writeToFile = true;
 }
 
 function timerDone(id) {
 	timers.forEach(function(timer) {
 		if (timer.id == id) {
+			//Add to history
 			timer.history.push(Date.now())
 			
+			//Update average
 			var timeSum = 0;
 			for (i = 1; i < timer.history.length; i++) {
-				console.log(timeSum)			
 				timeSum += timer.history[i] - timer.history[i-1];
 			}			
 			timer.average = timeSum/timer.history.length;
 		}
 	});
-	updateFile()
+	writeToFile = true;
 }
 
 function editTitle(id, newTitle) {
@@ -92,7 +99,7 @@ function editTitle(id, newTitle) {
 			timer.title = newTitle;
 		}
 	});
-	updateFile()
+	writeToFile = true;
 }
 
 function removeTimer(id) {
@@ -102,19 +109,21 @@ function removeTimer(id) {
 		}
 	});
 	timers.splice(indexToRemove, 1)
-	updateFile()
+	writeToFile = true;
 }
 
+//------------------------
+// FILESYSTEM
+//------------------------
+
 function updateFile(){ //Update the database file
-	fs.writeFile(filename, JSON.stringify(timers), 'utf8')
+	fs.writeFile(filename, JSON.stringify(timers), 'utf8');
 	console.log("[FS] File written");
 }
 
 function loadFile(){ //Load database from file
 	fs.readFile(filename,'utf8', function(err, fileData){
-		if (err) {
-			return console.log(err);
-		}
+		if (err) {return console.log(err);}
 		
 		timers = JSON.parse(fileData);
 		console.log("[FS] File read");
