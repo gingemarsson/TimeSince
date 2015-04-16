@@ -1,3 +1,37 @@
+/* Different screen sizes */
+@media all and (max-width: 380px){
+	html header h1 {font-size: 0.8em;}
+	html header {margin-top: 10px;}
+	
+	html .card {margin: 10px;}
+	
+	html .card .title {font-size: 0.9em;}
+	html .card .timer {font-size: 1em;}
+	html .card .tags {font-size: 0.6em;}
+	html .card .buttons {font-size: 0.8em; bottom: 24px;}
+	
+	html .add {font-size: 1em; margin: 0px 10px;}
+}
+
+@media all and (max-width: 980px) and (min-width: 380px){
+	html header h1 {font-size: 1em;}
+	html header {margin-top: 20px;}
+	
+	html .card .title {font-size: 1em;}
+	html .card .timer {font-size: 1.2em;}
+	html .card .tags {font-size: 0.8em;}
+	html .card .buttons {font-size: 0.8em; bottom: 24px;}
+	
+	html .add {font-size: 1em; margin: 0px 15px;}
+}
+@media all and (max-width: 1380px)and (min-width: 980px) {
+	html body {margin: 10px;}
+}
+@media all and (min-width: 1380px){
+	html body {width: 1280px;}
+}
+
+
 html {
 	background: #222222;
 	color: #FFFFFF;
@@ -15,7 +49,6 @@ html {
 }
 
 body {
-	width: 1280px;
 	margin: auto;
 }
 
@@ -37,11 +70,20 @@ header h1 {
 	line-height: 2.0em;
 	display: inline-block;
 	font-size: 1em;
-	margin: 15px 0 0 0;
+	margin: 5px;
 	padding: 5px;
 	font-size: 0.6em;
 	font-family: 'Open Sans', sans-serif;
 }
+
+.buttons {
+	position: absolute;
+	bottom: 45px;
+	right: 10px;
+	display: none;
+}
+
+.card:hover .buttons {display: block;}
 
 .add {
 	margin: 15px;
@@ -71,16 +113,22 @@ header h1 {
 	display: block;
 }
 
+.card h1 {
+	margin: 5px;
+}
+
 .card .title {
 	text-transform: uppercase;
 	font-size: 1.5em;
 	font-family: 'Open Sans', sans-serif;
+	position: relative;
 }
 
-.card .countdown {
+.card .timer {
 	text-transform: uppercase;
-	font-size: 2.0em;
+	font-size: 1.8em;
 	font-weight: 300; 
+	margin: 0;
 }
 
 .tags {
@@ -101,4 +149,13 @@ header h1 {
 	font-size: 0.6em;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 300; 
+}
+
+.editTitle {
+	font-size: 1.1em;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 50%;
+	display: none;
 }

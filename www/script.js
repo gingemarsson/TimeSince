@@ -1,57 +1,98 @@
-//Create a global variable time to track the time it takes to generate page
-var time;
+//Page load actions
+var data;
+$(".add").click(function(){sendCommand("/newTimer"); doGenerate(); setTimeout(doGenerate(), 300);});
 
+doGenerate()
+setInterval(updateTimers, 1000);
+
+//Generate the page
 function doGenerate(){
-	console.log("Updating..");
-	time = Date.now();
-	
 	var ajax = $.ajax("/timers")
 	
 	ajax.done(function(response) {
-		console.log("Updated (" + (Date.now() - time) + " ms)");
-		generateTimers(response);
+		data = response;
+		generateTimers();
+		updateTimers();
 	})
 	
 	ajax.fail(function() {console.log('FEL: Anslutningen kunde inte upprättas.')})
 }
 
-function generateTimers(data) {
+//Generate all the timers
+function generateTimers() {
 	var htmlString = "";
 
 	data.forEach(function(section){
-		htmlString += generateTimer(section);
+		htmlString += " <div class='card'>"
+		htmlString += "	<h1 class='title'><span class='titleText' data-editId='editTitle-" + section.id + "'>" + section.title + "</span><input type='text' class='editTitle' id='editTitle-" + section.id + "' data-id='" + section.id + "'></input><h1>"
+		htmlString += "	<span class='timer' data-lastTimedate='" + section.history[section.history.length - 1] + "' id='timer-" + section.id + "'>" + timeSince(section.history[section.history.length - 1]) + " ago</span>"
+		htmlString += "	<div class='tags'>"
+		if (section.average > 0) {htmlString += "		<span class='average tag'>" + timeSince(Date.now() - section.average) + " average (" + section.history.length + ")</span><br />";}
+		htmlString += "	</div>"
+		htmlString += "	<div class='progressbar'><span class='meter' id='progress-" + section.id + "'></span></div>"
+		htmlString += "	<div class='buttons'><div class='button done' data-id='" + section.id + "'>Done!</div><div class='button remove' data-id='" + section.id + "'>Remove</div></div>"
+		htmlString += "</div>"
 	});
 	
-	console.log("Generated HTML (" + (Date.now() - time) + " ms)");
 	$(".timers").html(htmlString)
 	
-	console.log("Done (" + (Date.now() - time) + " ms)");
+	//Edit titles
+	$(".titleText").dblclick(editTitle);
 	
-	console.log(data)
+	//Click done
+	$(".done").click(function(e){sendCommand("/done?id=" + $(this).attr("data-id")); doGenerate(); setTimeout(doGenerate(), 300);});
+	
+	//Remove
+	$(".remove").click(function(e){if(confirm("Remove timer?")){sendCommand("/remove?id=" + $(this).attr("data-id")); doGenerate(); setTimeout(doGenerate(), 300);}});
+
 }
 
-function generateTimer(section){			
-	htmlString = " <div class='card'>"
-	htmlString += "	<h1 class='title'>" + section.title + "<h1>"
-	htmlString += "	<span class='countdown'>" + timeSince(section.lastTimedate) + " ago</span>"
-	htmlString += "	<div class='tags'>"
-	htmlString += "		<span class='average tag'>" + timeSince(Date.now() - section.average) + " average</span><br />"
-	htmlString += "		<span class='count tag'>" + section.history.length + "</span>"
-	htmlString += "	</div>"
-	htmlString += "	<div class='progressbar'><span class='meter'></span></div>"
-	htmlString += "	<div class='button done'>Done!</div>"
-	htmlString += "</div>"
+//Edit title
+function editTitle(e) {
+	$("#" + $(this).attr("data-editId")).val($(this).html());
+	$(this).html("&nbsp;");
+	$("#" + $(this).attr("data-editId")).show();
+	$("#" + $(this).attr("data-editId")).focus();
 	
-	return htmlString;
+	//Close the editor when enter is pressed
+	$("#" + $(this).attr("data-editId")).unbind();
+	$("#" + $(this).attr("data-editId")).keyup(function(e) {
+		if(e.keyCode == 13) {
+			$(this).hide();
+			$("[data-editId='" + $(this).attr("id") + "']").html($(this).val());
+		}
+		sendCommand("/editTitle?id=" + $(this).attr("data-id") + "&newTitle=" + $(this).val());
+	});
 }
 
-doGenerate()
+//Send an update to the server
+function sendCommand(command) {
+	var ajax = $.ajax(command)
+			
+	ajax.done(function(response) {})
+	ajax.fail(function() {connectionErrorAlert(command);})
+}
 
+//Update all the timers
+function updateTimers() {
+	data.forEach(function(section){
+		$("#timer-" + section.id).html(timeSince(section.history[section.history.length - 1]) + " ago");
+		
+		progress = (Date.now() - section.history[section.history.length - 1])/section.average;
+		if (progress < 1) {
+			$("#progress-" + section.id).css("width", (progress * 100) + "%")
+		}
+		else {
+			$("#progress-" + section.id).css("width", "100%")
+			$("#progress-" + section.id).css("background", "#b8500d")
+		}
+		
+	});
+}
 
+//Generate a readable string describing the specified amount of time
 function timeSince(date) {
-
     var seconds = Math.floor((new Date() - date) / 1000);
-
     var interval = Math.floor(seconds / 31536000);
 
     if (interval > 1) {
