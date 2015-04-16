@@ -81,7 +81,6 @@ function updateTimers() {
 		$("#timer-" + section.id).html(timeSince(section.history[section.history.length - 1]) + " ago");
 		
 		progress = (Date.now() - section.history[section.history.length - 1])/section.average;
-		console.log(progress)
 		if (progress < 1) {
 			$("#progress-" + section.id).css("width", (progress * 100) + "%");
 		}
