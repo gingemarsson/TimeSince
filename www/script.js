@@ -25,16 +25,16 @@ function generateTimers() {
 	var htmlString = "";
 
 	data.forEach(function(section, sectionId){
-		htmlString += " <div class='card'>"
-		htmlString += "	<h1 class='title'><span class='titleText' data-editId='editTitle-" + section.id + "'>" + section.title + "</span><input type='text' class='editTitle' id='editTitle-" + section.id + "' data-id='" + section.id + "'></input><h1>"
-		htmlString += "	<span class='timer' data-lastTimedate='" + section.history[section.history.length - 1] + "' id='timer-" + section.id + "'>" + timeSince(section.history[section.history.length - 1]) + " ago</span>"
+		htmlString += "<div class='card'>"
+		htmlString += "<h1 class='title'><span class='titleText' data-editId='editTitle-" + section.id + "'>" + section.title + "</span><input type='text' class='editTitle' id='editTitle-" + section.id + "' data-id='" + section.id + "'></input><h1>"
+		htmlString += "<span class='timer' id='timer-" + section.id + "' title='" + new Date(section.history[section.history.length - 1]).toString() + "'></span>"
 		
-		htmlString += "	<div class='tags'>"
-		if (section.average > 0) {htmlString += "		<span class='average tag'>" + timeSince(Date.now() - section.average) + " average (" + section.history.length + ")</span><br />";}
-		htmlString += "	</div>"
+		htmlString += "<div class='tags'>"
+		if (section.average > 0) {htmlString += "<span class='average tag' title='" + (section.average/(1000*60*60)).toFixed(2) + " h'>" + timeSince(Date.now() - section.average) + " average (" + section.history.length + ")</span><br />";}
+		htmlString += "</div>"
 		
-		htmlString += "	<div class='progressbar'><span class='meter' id='progress-" + section.id + "'></span></div>"
-		htmlString += "	<div class='buttons'>"
+		htmlString += "<div class='progressbar'><span class='meter' id='progress-" + section.id + "'></span></div>"
+		htmlString += "<div class='buttons'>"
 		
 		htmlString += "<div class='button done' data-id='" + section.id + "'>&#10003; Done!</div>"
 		htmlString += "<div class='button remove' data-id='" + section.id + "'> &#10005; Remove</div>"
