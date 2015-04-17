@@ -93,7 +93,7 @@ function timerDone(id) {
 			for (i = 1; i < timer.history.length; i++) {
 				timeSum += timer.history[i] - timer.history[i-1];
 			}			
-			timer.average = timeSum/timer.history.length;
+			timer.average = timeSum/(timer.history.length - 1);
 		}
 	});
 	writeToFile = true;
