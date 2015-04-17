@@ -48,6 +48,12 @@ app.use("/remove" ,function(req, res, next){
 	res.send("Timer removed");
 });
 
+//Swap timers
+app.use("/swapTimers" ,function(req, res, next){
+	swapTimers(req.query.id, req.query.id2)
+	res.send("Order changed");
+});
+
 //Add new timer
 app.use("/newTimer" ,function(req, res, next){
 	addNewTimer()
@@ -109,6 +115,27 @@ function removeTimer(id) {
 		}
 	});
 	timers.splice(indexToRemove, 1)
+	writeToFile = true;
+}
+
+function swapTimers(id, id2) {
+	indexToSwap1 = -1;
+	indexToSwap2 = -1;
+	
+	timers.forEach(function(timer, timerIndex) {
+		if (timer.id == id) {indexToSwap1 = timerIndex;}
+	});
+	
+	timers.forEach(function(timer, timerIndex) {
+		if (timer.id == id2) {indexToSwap2 = timerIndex;}
+	});
+	
+	if(indexToSwap1 != -1 && indexToSwap2 != -1) {
+		temp = timers[indexToSwap1];
+		timers[indexToSwap1] = timers[indexToSwap2];
+		timers[indexToSwap2] = temp;
+	}
+	
 	writeToFile = true;
 }
 

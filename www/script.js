@@ -24,15 +24,24 @@ function doGenerate(){
 function generateTimers() {
 	var htmlString = "";
 
-	data.forEach(function(section){
+	data.forEach(function(section, sectionId){
 		htmlString += " <div class='card'>"
 		htmlString += "	<h1 class='title'><span class='titleText' data-editId='editTitle-" + section.id + "'>" + section.title + "</span><input type='text' class='editTitle' id='editTitle-" + section.id + "' data-id='" + section.id + "'></input><h1>"
 		htmlString += "	<span class='timer' data-lastTimedate='" + section.history[section.history.length - 1] + "' id='timer-" + section.id + "'>" + timeSince(section.history[section.history.length - 1]) + " ago</span>"
+		
 		htmlString += "	<div class='tags'>"
 		if (section.average > 0) {htmlString += "		<span class='average tag'>" + timeSince(Date.now() - section.average) + " average (" + section.history.length + ")</span><br />";}
 		htmlString += "	</div>"
+		
 		htmlString += "	<div class='progressbar'><span class='meter' id='progress-" + section.id + "'></span></div>"
-		htmlString += "	<div class='buttons'><div class='button done' data-id='" + section.id + "'>&#10003; Done!</div><div class='button remove' data-id='" + section.id + "'> &#10005; Remove</div></div>"
+		htmlString += "	<div class='buttons'>"
+		
+		htmlString += "<div class='button done' data-id='" + section.id + "'>&#10003; Done!</div>"
+		htmlString += "<div class='button remove' data-id='" + section.id + "'> &#10005; Remove</div>"
+		if (data[sectionId - 1] != undefined) {htmlString += "<div class='button up' data-id='" + section.id + "' data-swapWith='" + data[sectionId - 1].id + "'>&#x25B2;</div>"}
+		if (data[sectionId + 1] != undefined) {htmlString += "<div class='button down' data-id='" + section.id + "' data-swapWith='" + data[sectionId + 1].id + "'>&#x25BC;</div>"}
+		
+		htmlString += "</div>"
 		htmlString += "</div>"
 	});
 	
@@ -46,6 +55,12 @@ function generateTimers() {
 	
 	//Remove
 	$(".remove").click(function(e){if(confirm("Remove timer?")){sendCommand("/remove?id=" + $(this).attr("data-id")); doGenerate(); setTimeout(doGenerate(), 300);}});
+	
+	//Up
+	$(".up").click(function(e){sendCommand("/swapTimers?id=" + $(this).attr("data-id") + "&id2=" + $(this).attr("data-swapWith")); doGenerate(); setTimeout(doGenerate(), 300);});
+	
+	//Down
+	$(".down").click(function(e){sendCommand("/swapTimers?id=" + $(this).attr("data-id") + "&id2=" + $(this).attr("data-swapWith")); doGenerate(); setTimeout(doGenerate(), 300);});
 
 }
 
