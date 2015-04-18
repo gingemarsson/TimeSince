@@ -55,7 +55,7 @@ body {
 header {
 	margin-top: 50px;
 	font-family: 'Open Sans', sans-serif;
-	font-size: 2em;
+	font-size: 1.6em;
 	font-weight: 300; 
 }
 
@@ -81,7 +81,7 @@ header h1 {
 
 .buttons {
 	position: absolute;
-	bottom: 45px;
+	bottom: 35px;
 	right: 10px;
 	display: none;
 }
@@ -96,7 +96,7 @@ header h1 {
 }
 
 .card {
-	background: #333333;
+	background: #303030;
 	padding: 10px;
 	margin: 15px;
 	position: relative;
@@ -107,13 +107,16 @@ header h1 {
 .card .progressbar {
 	margin-top: 15px;
 	height: 6px;
-	border: 1px solid #444444;
+	background-color: #383838;
 }
+
 .card .progressbar .meter {
 	width: 100px;
 	height: 6px;
 	background: #29B80D;
 	display: block;
+
+    transition: width 1s linear, background-color 2s linear;
 }
 
 .card h1 {
@@ -122,14 +125,14 @@ header h1 {
 
 .card .title {
 	text-transform: uppercase;
-	font-size: 1.5em;
+	font-size: 1.4em;
 	font-family: 'Open Sans', sans-serif;
 	position: relative;
 }
 
 .card .timer {
 	text-transform: uppercase;
-	font-size: 1.8em;
+	font-size: 1.6em;
 	font-weight: 300; 
 	margin: 0;
 }
@@ -149,7 +152,7 @@ header h1 {
 	background: #3A3A3A;
 	line-height: 2.0em;
 	
-	font-size: 0.6em;
+	font-size: 0.55em;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 300; 
 }
