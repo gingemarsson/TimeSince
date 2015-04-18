@@ -17,7 +17,7 @@ function doGenerate(){
 		updateTimers();
 	})
 	
-	ajax.fail(function() {console.log('FEL: Anslutningen kunde inte upprättas.')})
+	ajax.fail(function() {connectionErrorAlert();})
 }
 
 //Generate all the timers
@@ -88,6 +88,26 @@ function sendCommand(command) {
 			
 	ajax.done(function(response) {})
 	ajax.fail(function() {connectionErrorAlert(command);})
+}
+
+var tryingToConnect = false;
+function connectionErrorAlert(command) {
+	if (tryingToConnect) {return;} //Make sure only one instance of trying to connect is run at the same time
+	$(".notification").show();
+	
+	tryingToConnect = true;
+	
+	var loop = setInterval( function(){
+		var ajax = $.ajax("/timers");
+		
+		ajax.done(function(response) {
+			clearInterval(loop);
+			$(".notification").fadeOut()
+			tryingToConnect = false;
+			doGenerate();
+		});
+	}, 5000);
+
 }
 
 //Update all the timers

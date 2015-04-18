@@ -10,7 +10,23 @@
 	html .card .tags {font-size: 0.6em;}
 	html .card .buttons {font-size: 0.8em; bottom: 24px;}
 	
-	html .add {font-size: 1em; margin: 0px 10px;}
+	html .add {font-size: 1em; margin: 0px 0px 10px 10px;}
+}
+
+@media all and (max-width: 780px){
+	html .notification {
+		bottom: 0px;
+		left: 0px;
+		right: 0px;
+		font-size: 0.8em;
+	}
+}
+
+@media all and (min-width: 781px){
+	.notification {
+		bottom: 15px;
+		right: 15px;
+	}
 }
 
 @media all and (max-width: 980px) and (min-width: 380px){
@@ -164,4 +180,28 @@ header h1 {
 	top: 0px;
 	width: 50%;
 	display: none;
+}
+
+.notification {
+	position: fixed;
+	background: #b80d0d;
+	z-index: 3000;
+	text-align: center;
+	display: none;
+}
+
+.notification .text{
+	display: inline-block;
+	padding: 5px 20px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1.2em;
+}
+
+.notification .icon {
+	padding: 10px;
+	display: inline-block;
+	width: 2em;
+	text-align: center;
+	font-size: 1.5em;
+	background-color: rgba(255, 255, 255, 0.15)
 }
