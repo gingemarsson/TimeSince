@@ -33,7 +33,7 @@ function generateTimers() {
 		if (section.average > 0) {htmlString += "<span class='average tag' title='" + (section.average/(1000*60*60)).toFixed(2) + " h'>" + timeSince(Date.now() - section.average) + " average (" + section.history.length + ")</span><br />";}
 		htmlString += "</div>"
 		
-		htmlString += "<div class='progressbar'><span class='meter' id='progress-" + section.id + "'></span></div>"
+		htmlString += "<div class='progressbar' id='progress-" + section.id + "'><span class='meter'></span></div>"
 		htmlString += "<div class='buttons'>"
 		
 		htmlString += "<div class='button done' data-id='" + section.id + "'>&#10003; Done!</div>"
@@ -113,19 +113,21 @@ function connectionErrorAlert(command) {
 //Update all the timers
 function updateTimers() {
 	data.forEach(function(section){
-		$("#timer-" + section.id).html(timeSince(section.history[section.history.length - 1]) + " ago");
-		
 		progress = (Date.now() - section.history[section.history.length - 1])/section.average;
+		
+		$("#timer-" + section.id).html(timeSince(section.history[section.history.length - 1]) + " ago");
+		$("#progress-" + section.id).attr("title", (progress * 100).toFixed(1) + "%");
+		
 		if (progress < 1) {
-			$("#progress-" + section.id).css("width", (progress * 100) + "%");
+			$("#progress-" + section.id + " .meter").css("width", (progress * 100) + "%");
 		}
 		else if (progress > 10 && progress != Infinity) {
-			$("#progress-" + section.id).css("width", "100%");
-			$("#progress-" + section.id).css("background", "#b80d0d");
+			$("#progress-" + section.id + " .meter").css("width", "100%");
+			$("#progress-" + section.id + " .meter").css("background", "#b80d0d");
 		}
 		else {
-			$("#progress-" + section.id).css("width", "100%");
-			$("#progress-" + section.id).css("background", "#b8500d");
+			$("#progress-" + section.id + " .meter").css("width", "100%");
+			$("#progress-" + section.id + " .meter").css("background", "#b8500d");
 		}
 		
 	});
