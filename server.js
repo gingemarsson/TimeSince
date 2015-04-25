@@ -32,31 +32,43 @@ app.use("/timers", function(req, res, next) {res.setHeader('Content-Type', 'appl
 
 //Edit title
 app.use("/editTitle" ,function(req, res, next){
-	editTitle(req.query.id, req.query.newTitle)
+	editTitle(req.query.id, req.query.newTitle);
 	res.send("Title changed");
 });
 
 //New event registered for timer
 app.use("/done" ,function(req, res, next){
-	timerDone(req.query.id)
+	timerDone(req.query.id, req.query.time);
 	res.send("Event recorded");
+});
+
+//Undo latest done 
+app.use("/undoLatest" ,function(req, res, next){
+	undoLatest(req.query.id);
+	res.send("Averages updates");
+});
+
+//Update averages
+app.use("/updateAverages" ,function(req, res, next){
+	updateAverages()
+	res.send("Averages updates");
 });
 
 //Remove a timer
 app.use("/remove" ,function(req, res, next){
-	removeTimer(req.query.id)
+	removeTimer(req.query.id);
 	res.send("Timer removed");
 });
 
 //Swap timers
 app.use("/swapTimers" ,function(req, res, next){
-	swapTimers(req.query.id, req.query.id2)
+	swapTimers(req.query.id, req.query.id2);
 	res.send("Order changed");
 });
 
 //Add new timer
 app.use("/newTimer" ,function(req, res, next){
-	addNewTimer()
+	addNewTimer();
 	res.send("New timer added");
 });
 
@@ -82,19 +94,42 @@ function addNewTimer() {
 	writeToFile = true;
 }
 
-function timerDone(id) {
+function timerDone(id, date) {
 	timers.forEach(function(timer) {
 		if (timer.id == id) {
 			//Add to history
-			timer.history.push(Date.now())
+			if (date == undefined || date < timer.history[timer.history.length - 1]) { timer.history.push(Date.now());}
+			else {timer.history.push(date);}
 			
-			//Update average
-			var timeSum = 0;
-			for (i = 1; i < timer.history.length; i++) {
-				timeSum += timer.history[i] - timer.history[i-1];
-			}			
-			timer.average = timeSum/(timer.history.length - 1);
+			updateAverage(timer);
 		}
+	});
+	writeToFile = true;
+}
+
+function undoLatest(id) {
+	timers.forEach(function(timer, timerIndex) {
+		if (timer.id == id) {
+			timer.history.splice(timer.history.length - 1, 1)
+		}
+		
+		updateAverage(timer);
+	});
+	writeToFile = true;
+}
+
+function updateAverage(timer) {
+	//Update average
+	var timeSum = 0;
+	for (i = 1; i < timer.history.length; i++) {
+		timeSum += timer.history[i] - timer.history[i-1];
+	}			
+	timer.average = timeSum/(timer.history.length - 1);
+}
+
+function updateAverages() {
+	timers.forEach(function(timer) {			
+		updateAverage(timer);
 	});
 	writeToFile = true;
 }
