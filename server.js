@@ -45,7 +45,7 @@ app.use("/done" ,function(req, res, next){
 //Undo latest done 
 app.use("/undoLatest" ,function(req, res, next){
 	undoLatest(req.query.id);
-	res.send("Averages updates");
+	res.send("Latest done removed");
 });
 
 //Update averages
