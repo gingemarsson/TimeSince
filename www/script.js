@@ -25,7 +25,9 @@ function generateTimers() {
 	var htmlString = "";
 
 	data.forEach(function(section, sectionId){
-		htmlString += "<div class='card'>"
+		if (section.hide) {classes = "card hide";}
+		else {classes = "card"}
+		htmlString += "<div class='" + classes + "'>"
 		htmlString += "<h1 class='title'><span class='titleText' data-editId='editTitle-" + section.id + "'>" + section.title + "</span><input type='text' class='editTitle' id='editTitle-" + section.id + "' data-id='" + section.id + "'></input><h1>"
 		htmlString += "<span class='timer' id='timer-" + section.id + "' title='" + new Date(section.history[section.history.length - 1]).toString() + "'></span>"
 		
@@ -38,6 +40,7 @@ function generateTimers() {
 		
 		htmlString += "<div class='button done' data-id='" + section.id + "'>&#10003; Done!</div>"
 		htmlString += "<div class='button remove' data-id='" + section.id + "'> &#10005; Remove</div>"
+		htmlString += "<div class='button toggleHide' data-id='" + section.id + "'>&#8900; Hide</div>"
 		if (data[sectionId - 1] != undefined) {htmlString += "<div class='button up' data-id='" + section.id + "' data-swapWith='" + data[sectionId - 1].id + "'>&#x25B2;</div>"}
 		if (data[sectionId + 1] != undefined) {htmlString += "<div class='button down' data-id='" + section.id + "' data-swapWith='" + data[sectionId + 1].id + "'>&#x25BC;</div>"}
 		
@@ -55,6 +58,9 @@ function generateTimers() {
 	
 	//Remove
 	$(".remove").click(function(e){if(confirm("Remove timer?")){sendCommand("/remove?id=" + $(this).attr("data-id")); doGenerate(); setTimeout(doGenerate(), 300);}});
+	
+	//Toggle hide
+	$(".toggleHide").click(function(e){sendCommand("/toggleHide?id=" + $(this).attr("data-id")); doGenerate(); setTimeout(doGenerate(), 300);});
 	
 	//Up
 	$(".up").click(function(e){sendCommand("/swapTimers?id=" + $(this).attr("data-id") + "&id2=" + $(this).attr("data-swapWith")); doGenerate(); setTimeout(doGenerate(), 300);});

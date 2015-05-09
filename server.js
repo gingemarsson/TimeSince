@@ -66,6 +66,12 @@ app.use("/swapTimers" ,function(req, res, next){
 	res.send("Order changed");
 });
 
+//Toggle hide of timer
+app.use("/toggleHide" ,function(req, res, next){
+	toggleHide(req.query.id);
+	res.send("Hide changed");
+});
+
 //Add new timer
 app.use("/newTimer" ,function(req, res, next){
 	addNewTimer();
@@ -171,6 +177,15 @@ function swapTimers(id, id2) {
 		timers[indexToSwap2] = temp;
 	}
 	
+	writeToFile = true;
+}
+
+function toggleHide(id) {
+	timers.forEach(function(timer) {
+		if (timer.id == id) {
+			timer.hide = !timer.hide;
+		}
+	});
 	writeToFile = true;
 }
 

@@ -205,3 +205,24 @@ header h1 {
 	font-size: 1.5em;
 	background-color: rgba(255, 255, 255, 0.15)
 }
+
+.hide, .toggleHide {
+	display: none;
+}
+
+:target ~ .timers .hide {
+	display: block;
+	background: repeating-linear-gradient(
+	  -45deg,
+	  #353535,
+	  #353535 10px,
+	  #3D3D3D 10px,
+	  #3D3D3D 20px
+	), #303030;
+	background-size: 100% 10px;
+	background-repeat: no-repeat;
+}
+
+:target ~ .timers .toggleHide {
+	display: inline-block;
+}
