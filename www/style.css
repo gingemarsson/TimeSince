@@ -45,6 +45,11 @@
 }
 @media all and (min-width: 1380px){
 	html body {width: 1280px;}
+	
+	html #showHiddenTimers, html #hideHiddenTimers {
+		height: 100px;
+		width: 100px;
+	}
 }
 
 
@@ -226,3 +231,13 @@ header h1 {
 :target ~ .timers .toggleHide {
 	display: inline-block;
 }
+
+#showHiddenTimers, #hideHiddenTimers {
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	top: 0;
+}
+
+#showHiddenTimers {right: 0;}
+#hideHiddenTimers {left: 0;}
