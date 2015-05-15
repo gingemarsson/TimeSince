@@ -241,3 +241,5 @@ header h1 {
 
 #showHiddenTimers {right: 0;}
 #hideHiddenTimers {left: 0;}
+
+#showHidden {position: fixed; top: 0;}
