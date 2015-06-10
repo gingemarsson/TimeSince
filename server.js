@@ -105,7 +105,7 @@ function timerDone(id, date) {
 		if (timer.id == id) {
 			//Add to history
 			if (date == undefined || date < timer.history[timer.history.length - 1]) { timer.history.push(Date.now());}
-			else {timer.history.push(date);}
+			else {timer.history.push(Number(date));}
 			
 			updateAverage(timer);
 		}
