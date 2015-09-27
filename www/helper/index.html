@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Days Since.</title>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <div class="wrapper">
+        <div role="main" class="main">
+        
+            <header class="">
+                <h1>Days Since.</h1>
+            </header>
+            
+            <div class="controls">
+                <input type='text' id='value' placeholder="0.0" autofocus></input>
+                <div class="button go">
+                    <span>Go!</span>
+                </div>
+                <span class="result">n/a</span>
+                <input type='text' class="resultField" value="1430511635401"></input>
+            </div>
+            
+            <hr />
+            
+            <div class="sendControls">
+                <select class="selectTimer">
+                    <option value="null">Loading...</option>
+                </select>
+                
+                <div class="button send">
+                    <span>Send</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class='notification notSucc'><span class="icon">&#10003</span><span class="text">Request sent!</span></div>
+    <div class='notification notFail'><span class="icon">!</span><span class="text">Connection lost. Try again in a minute.</span></div>
+    
+    <script src="../jquery-1.11.1.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
