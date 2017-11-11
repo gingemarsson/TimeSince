@@ -82,7 +82,8 @@ header {
 
 header h1 {
 	margin: auto; 
-	text-align: center
+	text-align: center;
+	font-weight: 500;
 }
 
 .button{
@@ -149,6 +150,7 @@ header h1 {
 	font-size: 1.4em;
 	font-family: 'Open Sans', sans-serif;
 	position: relative;
+	font-weight: 500;
 }
 
 .card .timer {
