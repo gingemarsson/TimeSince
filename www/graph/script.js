@@ -76,7 +76,7 @@ function draw(canvasID, dataX, dataY, average) {
    //GRID HORIZONTAL
     ctx.strokeStyle = gridColorHor;
     for (i = canvas.height/5; i < canvas.height; i += canvas.height/5) {
-        ctx.moveTo(40,i);
+        ctx.moveTo(48,i);
         ctx.lineTo(canvas.width,i);
         
         ctx.font="10px 'Open Sans'";
@@ -85,7 +85,7 @@ function draw(canvasID, dataX, dataY, average) {
        
         time = Math.min.apply(Math, dataY) + (Math.max.apply(Math, dataY) - Math.min.apply(Math, dataY))*((i - padding.T)/canvas.height);
         if (time > 0) {
-            ctx.fillText(timeSince(time), 35 - ctx.measureText(timeSince(time)).width, i + 3);
+            ctx.fillText(timeSince(time), 40 - ctx.measureText(timeSince(time)).width, i + 3);
         }
     }
     ctx.stroke();
@@ -110,7 +110,7 @@ function draw(canvasID, dataX, dataY, average) {
    
     //AVERAGE
     ctx.strokeStyle = averageColor;
-    ctx.moveTo(40, padding.B + ((average - Math.min.apply(Math, dataY))/(Math.max.apply(Math, dataY) - Math.min.apply(Math, dataY)))*(canvas.height - padding.T - padding.B));
+    ctx.moveTo(48, padding.B + ((average - Math.min.apply(Math, dataY))/(Math.max.apply(Math, dataY) - Math.min.apply(Math, dataY)))*(canvas.height - padding.T - padding.B));
     ctx.lineTo(canvas.width, padding.B + ((average - Math.min.apply(Math, dataY))/(Math.max.apply(Math, dataY) - Math.min.apply(Math, dataY)))*(canvas.height - padding.T - padding.B));
     ctx.stroke();
    
@@ -166,13 +166,13 @@ function timeSince(date) {
 
     intervalLimit = 1;
     
-    if (interval > intervalLimit) {
-        return interval + " yrs";
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > intervalLimit) {
-        return interval + " mns";
-    }
+    //if (interval > intervalLimit) {
+    //    return interval + " yrs";
+    //}
+    //interval = Math.floor(seconds / 2592000);
+    //if (interval > intervalLimit) {
+    //    return interval + " mns";
+    //}
     interval = Math.floor(seconds / 86400);
     if (interval > intervalLimit) {
         return interval + " days";
